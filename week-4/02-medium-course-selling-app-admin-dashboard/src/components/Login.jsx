@@ -1,17 +1,45 @@
 import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import ShowCourses from "./ShowCourses";
 
-/// File is incomplete. You need to add input boxes to take input for users to login.
 function Login() {
-    const [email, setEmail] = React.useState("");
+    const navigate=useNavigate();
+   
+    const [credentials, setCredentials] = React.useState({username:'',password:''});
+    
+    const loginUser=()=>{
+        axios.post(`http://localhost:3000/admin/login`,credentials).then(response=>{
+           console.log(response.data.message);
+           const token=response.data.token;
+           console.log("The type of token is on login "+typeof(token));
+           console.log(token);
+           localStorage.setItem('token',token);
+           navigate('/courses')
+        })
+    }
+    const handleInput=(e)=>{
+        setCredentials({
+        ...credentials,
+        [e.target.name]:e.target.value
+        })   
+    }
+
 
     return <div>
         <h1>Login to admin dashboard</h1>
         <br/>
-        Email - <input type={"text"} onChange={e => setEmail(e.target.value)} />
+        <label htmlFor="username">Username or E-mail:</label>
+        <br />
+        <input type={"text"} id="username" name="username" onChange={handleInput} />
         <br/>
-        <button>Login</button>
-        <br/>
-        New here? <a href="/register">Register</a>
+        <label htmlFor="password">Password:</label>
+        <br />
+        <input type={"text"} name="password" id="password" onChange={handleInput} />
+        <br />
+        <br />
+        <button onClick={loginUser}>Login</button>
+        Not a user? <a href="/register">Register</a>
     </div>
 }
 

@@ -1,13 +1,59 @@
 import React from "react";
+import axios from 'axios';
 /// You need to add input boxes to take input for users to create a course.
 /// I've added one input so you understand the api to do it.
 function CreateCourse() {
-    const [title, setTitle] = React.useState("");
+    const [about, setAbout] = React.useState({title:'',description:'',price:''});
+    const [msg,setmsg]=React.useState('');
 
+    const token=localStorage.getItem('token');
+    console.log("The type of token in createcourses "+typeof(token));
+    const headers={
+        'content-type':'application/json',
+        'accept':'application/json',
+        'Authorization':`Bearer ${token}`
+    }
+    console.log(headers)
+
+    const createCourse=()=>{
+        axios.post(`http://localhost:3000/admin/courses`,{
+        method:"POST",
+            headers:
+            {
+                'Authorization':"Bearer"+{token}
+            }
+        }).then(response=>{
+            console.log(response.data.message);
+            setmsg(response.data.message);
+        }).catch(error=>{
+            setmsg(error.response.data)
+        })
+    }
+
+    const handleInput=(e)=>{
+        setAbout({
+            ...about,
+            [e.target.name]:e.target.value
+        })
+    }
     return <div>
         <h1>Create Course Page</h1>
-        <input type={"text"} onChange={e => setTitle(e.target.value)} />
-        <button onClick={() => console.log(title)}>Create Course</button>
+        <label htmlFor="title">Title of the course: </label>
+        <input type={"text"} name="title" onChange={handleInput} />
+        <br />
+        <br />
+        <label htmlFor="description">Description of the course: </label>
+        <input type={"text"} onChange={handleInput} />
+        <br />
+        <br />
+        <label htmlFor="price">Price of the course: </label>
+        <input type={"text"} onChange={handleInput} />
+        <br />
+        <br />
+        <button onClick={createCourse}>Create Course</button>
+        <br />
+        <br />
+        <div>{msg}</div>
     </div>
 }
 export default CreateCourse;

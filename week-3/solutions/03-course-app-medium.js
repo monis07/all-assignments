@@ -2,7 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const app = express();
-
+const cors=require('cors');
+app.use(cors());
 app.use(express.json());
 
 let ADMINS = [];
@@ -24,7 +25,9 @@ console.log(ADMINS);
 const SECRET = 'my-secret-key';
 
 const authenticateJwt = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  console.log(req);
+  const authHeader = req.headers.Authorization;
+  console.log(authHeader);
   if (authHeader) {
     const token = authHeader.split(' ')[1];
     jwt.verify(token, SECRET, (err, user) => {
@@ -51,12 +54,12 @@ app.post('/admin/signup', (req, res) => {
     ADMINS.push(newAdmin);
     fs.writeFileSync('admins.json', JSON.stringify(ADMINS));
     const token = jwt.sign({ username, role: 'admin' }, SECRET, { expiresIn: '1h' });
-    res.json({ message: 'Admin created successfully', token });
+    res.json({ message: 'Admin created successfully. You can now login!', token });
   }
 });
 
 app.post('/admin/login', (req, res) => {
-  const { username, password } = req.headers;
+  const { username, password } = req.body;
   const admin = ADMINS.find(a => a.username === username && a.password === password);
   if (admin) {
     const token = jwt.sign({ username, role: 'admin' }, SECRET, { expiresIn: '1h' });
@@ -68,7 +71,7 @@ app.post('/admin/login', (req, res) => {
 
 app.post('/admin/courses', authenticateJwt, (req, res) => {
   const course = req.body;
-  course.id = COURSES.length + 1;
+  course.id = Math.random();
   COURSES.push(course);
   fs.writeFileSync('courses.json', JSON.stringify(COURSES));
   res.json({ message: 'Course created successfully', courseId: course.id });
