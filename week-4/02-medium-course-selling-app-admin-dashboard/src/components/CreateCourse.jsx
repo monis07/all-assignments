@@ -1,7 +1,6 @@
 import React from "react";
 import axios from 'axios';
-/// You need to add input boxes to take input for users to create a course.
-/// I've added one input so you understand the api to do it.
+
 function CreateCourse() {
     const [about, setAbout] = React.useState({title:'',description:'',price:''});
     const [msg,setmsg]=React.useState('');
