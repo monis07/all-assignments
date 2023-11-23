@@ -25,8 +25,7 @@ console.log(ADMINS);
 const SECRET = 'my-secret-key';
 
 const authenticateJwt = (req, res, next) => {
-  console.log(req);
-  const authHeader = req.headers.Authorization;
+  const authHeader = req.headers.authorization;
   console.log(authHeader);
   if (authHeader) {
     const token = authHeader.split(' ')[1];

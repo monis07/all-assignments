@@ -7,19 +7,14 @@ function CreateCourse() {
 
     const token=localStorage.getItem('token');
     console.log("The type of token in createcourses "+typeof(token));
-    const headers={
-        'content-type':'application/json',
-        'accept':'application/json',
-        'Authorization':`Bearer ${token}`
-    }
-    console.log(headers)
 
     const createCourse=()=>{
-        axios.post(`http://localhost:3000/admin/courses`,{
+        fetch(`http://localhost:3000/admin/courses`,{
         method:"POST",
             headers:
             {
-                'Authorization':"Bearer"+{token}
+                'Content-type':'application/json',
+                'Authorization':"Bearer "+token
             }
         }).then(response=>{
             console.log(response.data.message);
