@@ -1,0 +1,7 @@
+.buttons-registration{
+    display:flex;
+    flex-direction: column;
+}
+.button1{
+    margin-bottom: 10px;
+}

@@ -72,6 +72,7 @@ app.post('/admin/courses', authenticateJwt, (req, res) => {
   const course = req.body;
   course.id = Math.random();
   COURSES.push(course);
+  console.log(COURSES);
   fs.writeFileSync('courses.json', JSON.stringify(COURSES));
   res.json({ message: 'Course created successfully', courseId: course.id });
 });

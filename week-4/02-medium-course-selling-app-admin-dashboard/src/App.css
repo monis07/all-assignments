@@ -1,0 +1,29 @@
+body{
+    margin:0;
+    background-color: #f2f0e9;
+}
+.card{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 13px;
+    padding:20px;
+}
+.buttons{
+    display:flex;
+    justify-content: space-evenly;
+}
+
+.credentials{
+    display:flex;
+    flex-direction: column;
+    border:1px solid black;
+    padding:10px;
+    margin-bottom:10px;
+}
+.email{
+    margin-bottom: 12px;
+}

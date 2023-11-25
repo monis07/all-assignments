@@ -1,26 +1,29 @@
-import React from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
-function ShowCourses() {
-    const navigate=useNavigate();
-    const [courses, setCourses] = React.useState([]);
-
-    // Add code to fetch courses from the server
-    // and set it in the courses state variable.
-    axios.get(`http://localhost:3000/admin/courses`).then(response=>{
-        setCourses(response.data.courses);
-    })
-    return <div>
-        <h1>Create Course Page</h1>
-        {courses.map(c => <Course title={c.title} />)}
-        <button onClick={()=>{navigate('/about')}}>Create a new Course</button>
+function ShowCourses({courses}) { 
+    return <div style={{
+        display:"flex",
+        flexWrap:"wrap"
+    }}>
+        {courses.map((c) => {
+        return <Course title={c.title} description={c.description} price={c.price}/>
+        })}
     </div>
 }
 
 function Course(props) {
-    return <div>
+    return <div style={{
+        border:"2px solid green",
+        padding:"15px",
+        width:"29vw",
+        margin:"5px"
+    }}>
         <h1>{props.title}</h1>
+        <p>{props.description}</p>
+        <p>Price:{props.price}</p>
+        <Button variant="contained">Edit</Button>
+
+
     </div>
 }
 

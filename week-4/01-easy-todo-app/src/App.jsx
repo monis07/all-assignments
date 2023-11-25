@@ -12,7 +12,7 @@ function App() {
     },[]);
 
     const fetchTodo=()=>{
-      axios.get("http://localhost:3000/todos").then((response)=>{
+      axios.get("http://localhost:3001/todos").then((response)=>{
           setTodos(response.data);
           console.log(response.data);
       }
@@ -21,7 +21,7 @@ function App() {
 
       //delete todo with the help of id
       const deleteTodo=(id)=>{
-        axios.delete(`http://localhost:3000/todos/${id}`).then((response)=>{
+        axios.delete(`http://localhost:3001/todos/${id}`).then((response)=>{
             console.log(response);
             fetchTodo();
           })
@@ -38,7 +38,7 @@ function App() {
 
         //to add new todo with the help of a button
         const addnewTodo=()=>{
-          axios.post(`http://localhost:3000/todos`,newTodo).then(response=>{
+          axios.post(`http://localhost:3001/todos`,newTodo).then(response=>{
             console.log(response)
             fetchTodo()
           })
