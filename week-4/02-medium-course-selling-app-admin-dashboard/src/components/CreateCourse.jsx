@@ -60,6 +60,9 @@ function CreateCourse() {
             [e.target.name]:e.target.value
         })
     }
+    if(!token){
+        return <div>Please login to create a course</div>
+    }
     return (<>
         <Navbar/>
 

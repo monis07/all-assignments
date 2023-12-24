@@ -1,11 +1,31 @@
 import { Button } from "@mui/material";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 function Navbar(){
+    const [user,setUser]=React.useState('');
+    const token=localStorage.getItem('token');
     const navigate=useNavigate();
     const logout=()=>{
             localStorage.removeItem('token');
             navigate('/login');
     }
+    React.useEffect(()=>{
+        fetch("http://localhost:3000/admin/me",{
+            method:"GET",
+            headers:
+            {
+                'Content-type':'application/json',
+                'Authorization':"Bearer "+token
+            }
+        }).then(response=>{
+            if(response.ok){
+                console.log(response);
+                return response.json();
+            }
+    }).then(data=>{
+        setUser(data.username);
+    })     
+},[])
     return (
     <div style={{
         display:"flex",
@@ -21,7 +41,7 @@ function Navbar(){
             }}>Coursera</h2>
         </div>
         <div>
-        <Button variant="contained" onClick={logout}>Log Out</Button>
+        {user}<Button variant="contained" onClick={logout}>Log Out</Button>
         </div>
     </div>
     )
