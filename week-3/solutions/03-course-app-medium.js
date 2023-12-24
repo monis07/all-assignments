@@ -1,3 +1,4 @@
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -41,7 +42,7 @@ const authenticateJwt = (req, res, next) => {
   }
 };
 
-// Admin routes
+// Admin routes for signup
 app.post('/admin/signup', (req, res) => {
   const { username, password } = req.body;
   const admin = ADMINS.find(a => a.username === username);
@@ -68,17 +69,26 @@ app.post('/admin/login', (req, res) => {
   }
 });
 
+
+
 app.post('/admin/courses', authenticateJwt, (req, res) => {
   const course = req.body;
   course.id = Math.random();
   COURSES.push(course);
-  console.log(COURSES);
+  console.log(COURSES); 
   fs.writeFileSync('courses.json', JSON.stringify(COURSES));
   res.json({ message: 'Course created successfully', courseId: course.id });
 });
 
+// create a route which returns username of the current user
+app.get('/admin/me', authenticateJwt, (req, res) => {
+  res.json({ username: req.user.username });
+});
+
 app.put('/admin/courses/:courseId', authenticateJwt, (req, res) => {
-  const course = COURSES.find(c => c.id === parseInt(req.params.courseId));
+  
+  const course = COURSES.find(c => c.id == req.params.courseId);
+
   if (course) {
     Object.assign(course, req.body);
     fs.writeFileSync('courses.json', JSON.stringify(COURSES));
@@ -87,6 +97,19 @@ app.put('/admin/courses/:courseId', authenticateJwt, (req, res) => {
     res.status(404).json({ message: 'Course not found' });
   }
 });
+
+//create a route which delete the course for which button has been clicked
+app.delete('/admin/courses/:courseId', authenticateJwt, (req, res) => {
+  const course = COURSES.find(c => c.id == req.params.courseId);
+  console.log(course);
+  if (course) {
+    COURSES = COURSES.filter(c => c.id != req.params.courseId);
+    fs.writeFileSync('courses.json', JSON.stringify(COURSES));
+    res.json({ message: 'Course deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Course not found' });
+  }
+})
 
 app.get('/admin/courses', authenticateJwt, (req, res) => {
   res.json({ courses: COURSES });
